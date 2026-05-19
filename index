@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>紫微斗數命理諮詢預約</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500&display=swap" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f5f4f0;
+    --bg-tertiary: #efede8;
+    --text-primary: #1a1a18;
+    --text-secondary: #6b6b65;
+    --text-tertiary: #a0a09a;
+    --border-light: rgba(0,0,0,0.1);
+    --border-mid: rgba(0,0,0,0.18);
+    --border-strong: rgba(0,0,0,0.28);
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --green: #3B6D11;
+    --green-bg: #EAF3DE;
+    --blue-bg: #E6F1FB;
+    --blue-text: #185FA5;
+    --pink-bg: #FBEAF0;
+    --pink-text: #993556;
+    --red-text: #A32D2D;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-primary: #1c1c1a;
+      --bg-secondary: #252522;
+      --bg-tertiary: #2e2e2b;
+      --text-primary: #f0ede8;
+      --text-secondary: #9a9990;
+      --text-tertiary: #5e5e58;
+      --border-light: rgba(255,255,255,0.08);
+      --border-mid: rgba(255,255,255,0.14);
+      --border-strong: rgba(255,255,255,0.22);
+    }
+  }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+    background: var(--bg-primary);
+    border-radius: var(--radius-lg);
+    border: 0.5px solid var(--border-light);
+    padding: 2.5rem 2rem;
+  }
+
+  /* ── Header ── */
+  .form-header { text-align: center; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--border-light); }
+  .badge { display: inline-block; font-size: 11px; letter-spacing: 0.15em; color: var(--text-secondary); background: var(--bg-secondary); padding: 4px 14px; border-radius: 20px; border: 0.5px solid var(--border-light); margin-bottom: 1rem; }
+  .form-header h1 { font-family: 'Noto Serif TC', serif; font-size: 26px; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+  .form-header p { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+  .stars-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 0.75rem; }
+  .star-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text-tertiary); }
+  .star-dot.active { background: var(--text-secondary); opacity: 0.8; }
+
+  /* ── Section ── */
+  .section { margin-bottom: 2rem; }
+  .section-label { font-family: 'Noto Serif TC', serif; font-size: 13px; font-weight: 500; color: var(--text-secondary); letter-spacing: 0.1em; margin-bottom: 1rem; display: flex; align-items: center; gap: 8px; }
+  .section-label::after { content: ''; flex: 1; height: 0.5px; background: var(--border-light); }
+
+  /* ── Fields ── */
+  .field-group { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .field-group.single { grid-template-columns: 1fr; }
+  .field-group.triple { grid-template-columns: 1fr 1fr 1fr; }
+  .field { display: flex; flex-direction: column; gap: 5px; }
+  .field label { font-size: 12px; color: var(--text-secondary); letter-spacing: 0.05em; }
+  .field input, .field select, .field textarea {
+    font-family: 'Noto Sans TC', sans-serif; font-size: 14px; color: var(--text-primary);
+    background: var(--bg-primary); border: 0.5px solid var(--border-mid);
+    border-radius: var(--radius-md); padding: 9px 12px; outline: none;
+    transition: border-color 0.15s; width: 100%;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--border-strong); box-shadow: 0 0 0 2px rgba(0,0,0,0.06);
+  }
+  .field textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+  .ig-wrap { position: relative; }
+  .ig-at { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); font-size: 14px; color: var(--text-tertiary); pointer-events: none; }
+  .ig-wrap input { padding-left: 24px; }
+
+  /* ── Toggle ── */
+  .toggle-row { display: flex; margin-bottom: 16px; border: 0.5px solid var(--border-mid); border-radius: var(--radius-md); overflow: hidden; }
+  .toggle-btn { flex: 1; padding: 9px 0; background: var(--bg-primary); border: none; font-family: 'Noto Sans TC', sans-serif; font-size: 14px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; border-right: 0.5px solid var(--border-mid); }
+  .toggle-btn:last-child { border-right: none; }
+  .toggle-btn.active { background: var(--bg-secondary); color: var(--text-primary); font-weight: 500; }
+  .cal-panel { display: none; }
+  .cal-panel.active { display: block; }
+
+  /* ── Gender ── */
+  .gender-row { display: flex; gap: 8px; }
+  .gender-btn { flex: 1; padding: 9px 0; border: 0.5px solid var(--border-mid); background: var(--bg-primary); border-radius: var(--radius-md); font-family: 'Noto Sans TC', sans-serif; font-size: 14px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; }
+  .gender-btn.selected { background: var(--bg-secondary); color: var(--text-primary); border-color: var(--border-strong); font-weight: 500; }
+
+  /* ── Topics ── */
+  .topic-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .topic-chip { padding: 8px 10px; border: 0.5px solid var(--border-light); border-radius: var(--radius-md); background: var(--bg-primary); font-family: 'Noto Sans TC', sans-serif; font-size: 13px; color: var(--text-secondary); cursor: pointer; text-align: center; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .topic-chip i { font-size: 14px; }
+  .topic-chip.selected { background: var(--bg-secondary); border-color: var(--border-strong); color: var(--text-primary); font-weight: 500; }
+
+  /* ── Teacher cards ── */
+  .teacher-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .teacher-card { border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); padding: 16px; cursor: pointer; transition: all 0.15s; background: var(--bg-primary); display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+  .teacher-card:hover { background: var(--bg-secondary); }
+  .teacher-card.selected { border-color: var(--border-strong); background: var(--bg-secondary); }
+  .teacher-avatar { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .teacher-avatar.male { background: var(--blue-bg); }
+  .teacher-avatar.female { background: var(--pink-bg); }
+  .teacher-name { font-size: 14px; font-weight: 500; }
+  .teacher-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+  .teacher-tag { font-size: 11px; padding: 3px 10px; border-radius: 20px; }
+  .teacher-tag.male { background: var(--blue-bg); color: var(--blue-text); }
+  .teacher-tag.female { background: var(--pink-bg); color: var(--pink-text); }
+  .sync-status { font-size: 12px; display: flex; align-items: center; gap: 5px; margin-top: 4px; }
+  .sync-status.loading { color: var(--text-secondary); }
+  .sync-status.ok  { color: var(--green); }
+  .sync-status.err { color: var(--red-text); }
+
+  /* ── Calendar ── */
+  .calendar-block { border: 0.5px solid var(--border-light); border-radius: var(--radius-lg); overflow: hidden; }
+  .cal-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 0.5px solid var(--border-light); background: var(--bg-secondary); }
+  .cal-header span { font-family: 'Noto Serif TC', serif; font-size: 15px; font-weight: 500; }
+  .cal-nav { background: none; border: none; cursor: pointer; color: var(--text-secondary); padding: 4px 8px; border-radius: var(--radius-md); font-size: 16px; display: flex; align-items: center; transition: background 0.1s; }
+  .cal-nav:hover { background: var(--bg-primary); }
+  .cal-grid { padding: 12px 16px 16px; background: var(--bg-primary); }
+  .cal-days-header { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; margin-bottom: 4px; }
+  .cal-day-name { text-align: center; font-size: 11px; color: var(--text-secondary); padding: 4px 0; }
+  .cal-days { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; }
+  .cal-day { text-align: center; padding: 7px 2px; font-size: 13px; border-radius: var(--radius-md); cursor: pointer; transition: all 0.12s; border: 0.5px solid transparent; }
+  .cal-day:hover:not(.disabled):not(.empty) { background: var(--bg-secondary); border-color: var(--border-light); }
+  .cal-day.selected { background: var(--bg-secondary); border-color: var(--border-strong); font-weight: 500; }
+  .cal-day.disabled { color: var(--text-tertiary); cursor: default; }
+  .cal-day.empty { cursor: default; }
+  .cal-day.today { font-weight: 500; color: var(--text-primary); }
+
+  /* ── Time slots ── */
+  .time-section { border-top: 0.5px solid var(--border-light); padding: 14px 16px 16px; background: var(--bg-primary); }
+  .time-hint { font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .hint-dot { display: inline-flex; align-items: center; gap: 5px; }
+  .hint-swatch { width: 10px; height: 10px; border-radius: 2px; border: 0.5px solid var(--border-mid); }
+  .hint-swatch.avail { background: var(--bg-primary); }
+  .hint-swatch.booked { background: var(--bg-secondary); }
+  .time-slots { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
+  .time-slot { padding: 8px 4px; text-align: center; font-size: 13px; border: 0.5px solid var(--border-light); border-radius: var(--radius-md); cursor: pointer; color: var(--text-secondary); background: var(--bg-primary); transition: all 0.12s; }
+  .time-slot:hover:not(.booked) { background: var(--bg-secondary); border-color: var(--border-mid); }
+  .time-slot.selected { background: var(--bg-secondary); border-color: var(--border-strong); color: var(--text-primary); font-weight: 500; }
+  .time-slot.booked { color: var(--text-tertiary); cursor: default; text-decoration: line-through; opacity: 0.45; background: var(--bg-secondary); }
+
+  /* ── Mode ── */
+  .mode-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .mode-btn { flex: 1; padding: 10px 0; border: 0.5px solid var(--border-mid); background: var(--bg-primary); border-radius: var(--radius-md); font-family: 'Noto Sans TC', sans-serif; font-size: 14px; color: var(--text-secondary); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .mode-btn i { font-size: 15px; }
+  .mode-btn.selected { background: var(--bg-secondary); color: var(--text-primary); border-color: var(--border-strong); font-weight: 500; }
+  .loc-field { display: none; }
+  .loc-field.show { display: flex; }
+
+  /* ── Submit ── */
+  .submit-area { margin-top: 2rem; padding-top: 1.5rem; border-top: 0.5px solid var(--border-light); display: flex; flex-direction: column; gap: 12px; }
+  .summary-pill { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--bg-secondary); border-radius: var(--radius-md); font-size: 13px; color: var(--text-secondary); border: 0.5px solid var(--border-light); min-height: 40px; }
+  .summary-pill i { font-size: 15px; flex-shrink: 0; }
+  .summary-pill strong { color: var(--text-primary); font-weight: 500; }
+  .submit-btn { padding: 12px 24px; background: var(--bg-secondary); border: 0.5px solid var(--border-strong); border-radius: var(--radius-md); font-family: 'Noto Serif TC', serif; font-size: 15px; font-weight: 500; color: var(--text-primary); cursor: pointer; letter-spacing: 0.08em; transition: all 0.15s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .submit-btn:hover { background: var(--bg-primary); }
+  .submit-btn:active { transform: scale(0.99); }
+
+  /* ── Success ── */
+  .success-box { display: none; text-align: center; padding: 2.5rem 2rem; }
+  .success-box .check-i { font-size: 40px; color: var(--green); margin-bottom: 1rem; display: block; }
+  .success-box h2 { font-family: 'Noto Serif TC', serif; font-size: 20px; margin-bottom: 0.75rem; }
+  .success-box p { font-size: 13px; color: var(--text-secondary); line-height: 1.9; white-space: pre-line; }
+  .gcal-btn { display: inline-flex; align-items: center; gap: 8px; margin-top: 1.5rem; padding: 10px 22px; border: 0.5px solid var(--border-mid); border-radius: var(--radius-md); font-size: 13px; color: var(--text-secondary); text-decoration: none; background: var(--bg-secondary); cursor: pointer; transition: all 0.15s; font-family: 'Noto Sans TC', sans-serif; }
+  .gcal-btn:hover { background: var(--bg-primary); }
+
+  /* ── Hint box ── */
+  .hint-box { font-size: 13px; color: var(--text-secondary); padding: 12px 0; }
+
+  @media (max-width: 500px) {
+    .container { padding: 1.5rem 1rem; }
+    .field-group.triple { grid-template-columns: 1fr 1fr; }
+    .time-slots { grid-template-columns: repeat(3,1fr); }
+    .topic-grid { grid-template-columns: repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ══ FORM ══ -->
+  <div id="mainForm">
+    <div class="form-header">
+      <div class="stars-row">
+        <div class="star-dot active"></div><div class="star-dot active"></div><div class="star-dot"></div>
+        <div class="star-dot active"></div><div class="star-dot active"></div><div class="star-dot active"></div>
+        <div class="star-dot"></div><div class="star-dot active"></div><div class="star-dot active"></div>
+      </div>
+      <div class="badge">紫微斗數 · 命盤諮詢</div>
+      <h1>預約命理諮詢</h1>
+      <p>請填寫您的出生資料，排盤後由老師進行深度解析<br>每次諮詢約 60 分鐘</p>
+    </div>
+
+    <!-- 基本資料 -->
+    <div class="section">
+      <div class="section-label">基本資料</div>
+      <div class="field-group">
+        <div class="field"><label>姓名</label><input type="text" id="name" placeholder="請輸入姓名" /></div>
+        <div class="field"><label>Instagram 帳號（聯繫用）</label>
+          <div class="ig-wrap"><span class="ig-at">@</span><input type="text" id="ig" placeholder="your_username" autocomplete="off" /></div>
+        </div>
+      </div>
+      <div class="field-group single">
+        <div class="field"><label>電子信箱</label><input type="email" id="email" placeholder="your@email.com" /></div>
+      </div>
+    </div>
+
+    <!-- 出生資料 -->
+    <div class="section">
+      <div class="section-label">出生資料</div>
+      <div class="toggle-row">
+        <button class="toggle-btn active" id="btnSolar" onclick="switchCal('solar')">國曆（西曆）</button>
+        <button class="toggle-btn" id="btnLunar" onclick="switchCal('lunar')">農曆</button>
+      </div>
+      <!-- 國曆 -->
+      <div class="cal-panel active" id="panelSolar">
+        <div class="field-group triple" style="margin-bottom:12px">
+          <div class="field"><label>出生年份</label><input type="number" id="solarYear" placeholder="1990" min="1900" max="2100" /></div>
+          <div class="field"><label>出生月份</label>
+            <select id="solarMonth"><option value="">月份</option><option>1月</option><option>2月</option><option>3月</option><option>4月</option><option>5月</option><option>6月</option><option>7月</option><option>8月</option><option>9月</option><option>10月</option><option>11月</option><option>12月</option></select>
+          </div>
+          <div class="field"><label>出生日期</label><input type="number" id="solarDay" placeholder="15" min="1" max="31" /></div>
+        </div>
+        <div class="field-group">
+          <div class="field"><label>出生時間</label>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input type="number" id="solarHour" placeholder="時" min="0" max="23" style="width:100%" />
+              <span style="font-size:14px;color:var(--text-secondary);flex-shrink:0">:</span>
+              <input type="number" id="solarMin" placeholder="分" min="0" max="59" style="width:100%" />
+            </div>
+          </div>
+          <div class="field"><label>性別</label>
+            <div class="gender-row"><button class="gender-btn" onclick="selectGender(this)">男</button><button class="gender-btn" onclick="selectGender(this)">女</button></div>
+          </div>
+        </div>
+      </div>
+      <!-- 農曆 -->
+      <div class="cal-panel" id="panelLunar">
+        <div class="field-group triple" style="margin-bottom:12px">
+          <div class="field"><label>農曆年份</label><input type="number" id="lunarYear" placeholder="1990" min="1900" max="2100" /></div>
+          <div class="field"><label>農曆月份</label>
+            <select id="lunarMonth"><option value="">月份</option><option>正月</option><option>二月</option><option>三月</option><option>四月</option><option>五月</option><option>六月</option><option>七月</option><option>八月</option><option>九月</option><option>十月</option><option>十一月</option><option>十二月</option><option>閏月</option></select>
+          </div>
+          <div class="field"><label>農曆日期</label>
+            <select id="lunarDay"><option value="">日期</option><option>初一</option><option>初二</option><option>初三</option><option>初四</option><option>初五</option><option>初六</option><option>初七</option><option>初八</option><option>初九</option><option>初十</option><option>十一</option><option>十二</option><option>十三</option><option>十四</option><option>十五</option><option>十六</option><option>十七</option><option>十八</option><option>十九</option><option>二十</option><option>廿一</option><option>廿二</option><option>廿三</option><option>廿四</option><option>廿五</option><option>廿六</option><option>廿七</option><option>廿八</option><option>廿九</option><option>三十</option></select>
+          </div>
+        </div>
+        <div class="field-group">
+          <div class="field"><label>出生時辰</label>
+            <select id="lunarHour"><option value="">請選擇</option><option>子時 23:00–01:00</option><option>丑時 01:00–03:00</option><option>寅時 03:00–05:00</option><option>卯時 05:00–07:00</option><option>辰時 07:00–09:00</option><option>巳時 09:00–11:00</option><option>午時 11:00–13:00</option><option>未時 13:00–15:00</option><option>申時 15:00–17:00</option><option>酉時 17:00–19:00</option><option>戌時 19:00–21:00</option><option>亥時 21:00–23:00</option><option>不確定</option></select>
+          </div>
+          <div class="field"><label>性別</label>
+            <div class="gender-row"><button class="gender-btn" onclick="selectGender(this)">男</button><button class="gender-btn" onclick="selectGender(this)">女</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="field-group single" style="margin-top:12px">
+        <div class="field"><label>出生地點（選填）</label><input type="text" id="birthPlace" placeholder="例：台北市 / 高雄市 / 台中市" /></div>
+      </div>
+    </div>
+
+    <!-- 諮詢主題 -->
+    <div class="section">
+      <div class="section-label">諮詢主題</div>
+      <div class="topic-grid">
+        <div class="topic-chip" onclick="toggleTopic(this)"><i class="ti ti-heart"></i>感情婚姻</div>
+        <div class="topic-chip" onclick="toggleTopic(this)"><i class="ti ti-briefcase"></i>事業工作</div>
+        <div class="topic-chip" onclick="toggleTopic(this)"><i class="ti ti-coins"></i>財運投資</div>
+        <div class="topic-chip" onclick="toggleTopic(this)"><i class="ti ti-activity"></i>健康身體</div>
+        <div class="topic-chip" onclick="toggleTopic(this)"><i class="ti ti-users"></i>家庭人際</div>
+        <div class="topic-chip" onclick="toggleTopic(this)"><i class="ti ti-school"></i>學業進修</div>
+        <div class="topic-chip" onclick="toggleTopic(this)"><i class="ti ti-map-pin"></i>移居遷移</div>
+        <div class="topic-chip" onclick="toggleTopic(this)"><i class="ti ti-sparkles"></i>整體運勢</div>
+        <div class="topic-chip" onclick="toggleTopic(this)"><i class="ti ti-question-mark"></i>其他問題</div>
+      </div>
+      <div class="field-group single" style="margin-top:12px">
+        <div class="field"><label>補充說明（選填）</label><textarea id="notes" placeholder="請描述您想了解的具體問題或近況..."></textarea></div>
+      </div>
+    </div>
+
+    <!-- 選擇老師 -->
+    <div class="section">
+      <div class="section-label">選擇老師</div>
+      <div class="teacher-grid">
+        <div class="teacher-card" id="teacherMale" onclick="selectTeacher('male')">
+          <div class="teacher-avatar male">👨‍🏫</div>
+          <div class="teacher-name">男老師</div>
+          <div class="teacher-desc">擅長事業財運、大運流年分析</div>
+          <span class="teacher-tag male">ryan70710@gmail.com</span>
+        </div>
+        <div class="teacher-card" id="teacherFemale" onclick="selectTeacher('female')">
+          <div class="teacher-avatar female">👩‍🏫</div>
+          <div class="teacher-name">女老師</div>
+          <div class="teacher-desc">擅長感情婚姻、人際關係解析</div>
+          <span class="teacher-tag female">女老師</span>
+          <div class="sync-status loading" id="syncStatus"><i class="ti ti-refresh" style="font-size:12px"></i> 載入行程中...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 選擇時間 -->
+    <div class="section">
+      <div class="section-label">選擇諮詢時間</div>
+      <div class="hint-box" id="noTeacherHint">請先選擇老師，再選擇時間。</div>
+      <div id="calendarWrap" style="display:none">
+        <div class="calendar-block">
+          <div class="cal-header">
+            <button class="cal-nav" onclick="prevMonth()"><i class="ti ti-chevron-left"></i></button>
+            <span id="calTitle"></span>
+            <button class="cal-nav" onclick="nextMonth()"><i class="ti ti-chevron-right"></i></button>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-days-header">
+              <div class="cal-day-name">日</div><div class="cal-day-name">一</div><div class="cal-day-name">二</div>
+              <div class="cal-day-name">三</div><div class="cal-day-name">四</div><div class="cal-day-name">五</div><div class="cal-day-name">六</div>
+            </div>
+            <div class="cal-days" id="calDays"></div>
+          </div>
+          <div id="timeSection" style="display:none">
+            <div class="time-section">
+              <div class="time-hint">
+                <span id="timeDateLabel" style="font-weight:500;color:var(--text-primary)"></span>
+                <span class="hint-dot"><span class="hint-swatch avail"></span>可預約</span>
+                <span class="hint-dot"><span class="hint-swatch booked"></span>已排定</span>
+              </div>
+              <div class="time-slots" id="timeSlots"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 諮詢方式 -->
+    <div class="section" id="consultModeSection" style="display:none">
+      <div class="section-label">諮詢方式</div>
+      <div class="mode-row">
+        <button class="mode-btn" id="modeOnline" onclick="selectMode('online')"><i class="ti ti-video"></i> 線上諮詢</button>
+        <button class="mode-btn" id="modeFace"   onclick="selectMode('face')"><i class="ti ti-map-pin"></i> 當面諮詢</button>
+      </div>
+      <div class="field loc-field" id="locationField">
+        <label>方便的地點（選填）</label>
+        <input type="text" id="locationInput" placeholder="例：台北車站附近、信義區咖啡廳..." />
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-area">
+      <div class="summary-pill">
+        <i class="ti ti-calendar"></i>
+        <span id="summaryText">請選擇老師與諮詢時間</span>
+      </div>
+      <button class="submit-btn" onclick="submitForm()">
+        <i class="ti ti-send"></i> 確認預約
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ SUCCESS ══ -->
+  <div class="success-box" id="successBox">
+    <i class="ti ti-circle-check check-i"></i>
+    <h2 id="successTitle">預約已送出</h2>
+    <p id="successDetail"></p>
+    <a class="gcal-btn" href="#" onclick="addToCalendar(event)">
+      <i class="ti ti-calendar-plus"></i> 加入 Google 日曆
+    </a>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ══════════════════════════════════════════════════════
+//  女老師 iCal（已設公開的獨立行事曆）
+// ══════════════════════════════════════════════════════
+const FEMALE_ICAL = 'https://calendar.google.com/calendar/ical/87634df6559cefa2923b81f5c4b48b3ceb309fab85f4b409befddf25ad101316%40group.calendar.google.com/public/basic.ics';
+
+// ══════════════════════════════════════════════════════
+//  男老師忙碌時段（手動維護）
+//  格式：'YYYY-MM-DD': [14, 15, 16]
+// ══════════════════════════════════════════════════════
+const MALE_BUSY = {
+  '2026-05-21': [14, 15],
+};
+
+// ══════════════════════════════════════════════════════
+//  CORS Proxy 輪詢（部署到真實網站後即可正常使用）
+// ══════════════════════════════════════════════════════
+const PROXIES = [
+  u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+  u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+  u => `https://thingproxy.freeboard.io/fetch/${u}`,
+];
+
+const ALL_SLOTS  = [14,15,16,17,18,19,20];
+const DAYS_TW    = ['日','一','二','三','四','五','六'];
+const MONTHS_TW  = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+
+let curY, curM;
+let selY=null, selM=null, selD=null;
+let selTime=null, selTeacher=null, selMode=null;
+let femaleBusy = {};
+
+// ── iCal 解析 ────────────────────────────────────────
+function parseIcal(txt) {
+  const busy = {};
+  txt.split('BEGIN:VEVENT').slice(1).forEach(ev => {
+    const sM = ev.match(/DTSTART(?:[^:\n]*):(\d{8}T\d{6}Z?)/);
+    const eM = ev.match(/DTEND(?:[^:\n]*):(\d{8}T\d{6}Z?)/);
+    if (!sM || !eM) return;
+    function toLocal(s) {
+      const y=+s.slice(0,4),mo=+s.slice(4,6)-1,d=+s.slice(6,8),h=+s.slice(9,11),mi=+s.slice(11,13);
+      return s.endsWith('Z') ? new Date(Date.UTC(y,mo,d,h,mi)+8*3600000) : new Date(y,mo,d,h,mi);
+    }
+    let cur = toLocal(sM[1]);
+    const end = toLocal(eM[1]);
+    while (cur < end) {
+      const k = cur.getFullYear()+'-'+String(cur.getMonth()+1).padStart(2,'0')+'-'+String(cur.getDate()).padStart(2,'0');
+      if (!busy[k]) busy[k]=[];
+      const hr=cur.getHours();
+      if (!busy[k].includes(hr)) busy[k].push(hr);
+      cur = new Date(cur.getTime()+3600000);
+    }
+  });
+  return busy;
+}
+
+async function loadFemale() {
+  const el = document.getElementById('syncStatus');
+  for (const mk of PROXIES) {
+    try {
+      const r = await fetch(mk(FEMALE_ICAL), { signal: AbortSignal.timeout(8000) });
+      if (!r.ok) continue;
+      const txt = await r.text();
+      if (!txt.includes('VCALENDAR')) continue;
+      femaleBusy = parseIcal(txt);
+      el.className='sync-status ok';
+      el.innerHTML='<i class="ti ti-circle-check" style="font-size:12px"></i> 行程已同步';
+      return;
+    } catch(e) {}
+  }
+  el.className='sync-status err';
+  el.innerHTML='<i class="ti ti-alert-circle" style="font-size:12px"></i> 無法載入（將手動維護）';
+}
+
+// ── 初始化 ───────────────────────────────────────────
+function init() {
+  const n=new Date(); curY=n.getFullYear(); curM=n.getMonth();
+  loadFemale();
+}
+
+function switchCal(t) {
+  document.getElementById('panelSolar').classList.toggle('active', t==='solar');
+  document.getElementById('panelLunar').classList.toggle('active', t==='lunar');
+  document.getElementById('btnSolar').classList.toggle('active', t==='solar');
+  document.getElementById('btnLunar').classList.toggle('active', t==='lunar');
+}
+
+function selectTeacher(t) {
+  selTeacher=t; selY=selM=selD=null; selTime=null;
+  document.getElementById('teacherMale').classList.toggle('selected', t==='male');
+  document.getElementById('teacherFemale').classList.toggle('selected', t==='female');
+  document.getElementById('noTeacherHint').style.display='none';
+  document.getElementById('calendarWrap').style.display='block';
+  document.getElementById('timeSection').style.display='none';
+  document.getElementById('consultModeSection').style.display='none';
+  renderCalendar(); updateSummary();
+}
+
+function wd(y,m,d){ return new Date(y,m,d).getDay(); }
+
+function renderCalendar() {
+  document.getElementById('calTitle').textContent=curY+' 年 '+MONTHS_TW[curM];
+  const fw=new Date(curY,curM,1).getDay();
+  const dim=new Date(curY,curM+1,0).getDate();
+  const n=new Date(); const ty=n.getFullYear(),tm=n.getMonth(),td=n.getDate();
+  let html='';
+  for(let i=0;i<fw;i++) html+='<div class="cal-day empty"></div>';
+  for(let d=1;d<=dim;d++){
+    const w=wd(curY,curM,d);
+    const past=(curY<ty)||(curY===ty&&curM<tm)||(curY===ty&&curM===tm&&d<td);
+    let cls='cal-day';
+    if(past||w===0) cls+=' disabled';
+    if(curY===ty&&curM===tm&&d===td) cls+=' today';
+    if(selY===curY&&selM===curM&&selD===d) cls+=' selected';
+    const h=(past||w===0)?'':` onclick="selectDate(${curY},${curM},${d},this)"`;
+    html+=`<div class="${cls}"${h}>${d}</div>`;
+  }
+  document.getElementById('calDays').innerHTML=html;
+}
+
+function dk(y,m,d){ return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'); }
+
+function getBusy(){
+  if(selY===null) return [];
+  const k=dk(selY,selM,selD);
+  return selTeacher==='female' ? (femaleBusy[k]||[]) : (MALE_BUSY[k]||[]);
+}
+
+function selectDate(y,m,d,el){
+  selY=y;selM=m;selD=d;selTime=null;
+  document.querySelectorAll('.cal-day').forEach(x=>x.classList.remove('selected'));
+  el.classList.add('selected');
+  renderTimeSlots(); updateSummary();
+}
+
+function renderTimeSlots(){
+  document.getElementById('timeSection').style.display='block';
+  document.getElementById('timeDateLabel').textContent=(selM+1)+'/'+selD+'（週'+DAYS_TW[wd(selY,selM,selD)]+'）';
+  const busy=getBusy();
+  document.getElementById('timeSlots').innerHTML=ALL_SLOTS.map(h=>{
+    const lbl=String(h).padStart(2,'0')+':00';
+    const bk=busy.includes(h);
+    const sel=!bk&&selTime===lbl;
+    return `<div class="time-slot${bk?' booked':''}${sel?' selected':''}" ${bk?'':` onclick="selT('${lbl}',this)"`}>${lbl}</div>`;
+  }).join('');
+}
+
+function selT(t,el){
+  selTime=t;
+  document.querySelectorAll('.time-slot').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('consultModeSection').style.display='block';
+  updateSummary();
+}
+
+function selectMode(m){
+  selMode=m;
+  document.getElementById('modeOnline').classList.toggle('selected',m==='online');
+  document.getElementById('modeFace').classList.toggle('selected',m==='face');
+  document.getElementById('locationField').classList.toggle('show',m==='face');
+  updateSummary();
+}
+
+function updateSummary(){
+  const el=document.getElementById('summaryText');
+  if(!selTeacher){el.textContent='請選擇老師與諮詢時間';return;}
+  if(selY===null){el.textContent='請選擇諮詢日期';return;}
+  if(!selTime){el.textContent='請選擇諮詢時間';return;}
+  const tL=selTeacher==='male'?'男老師':'女老師';
+  const mL=selMode==='online'?'｜線上':selMode==='face'?'｜當面':'';
+  el.innerHTML=`<strong>${selY}/${selM+1}/${selD}（週${DAYS_TW[wd(selY,selM,selD)]}）${selTime}　${tL}${mL}</strong>`;
+}
+
+function selectGender(btn){
+  btn.closest('.gender-row').querySelectorAll('.gender-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+function toggleTopic(el){ el.classList.toggle('selected'); }
+function prevMonth(){ curM--; if(curM<0){curM=11;curY--;} renderCalendar(); }
+function nextMonth(){ curM++; if(curM>11){curM=0;curY++;} renderCalendar(); }
+
+function submitForm(){
+  const name=document.getElementById('name').value.trim();
+  const ig=document.getElementById('ig').value.trim();
+  const email=document.getElementById('email').value.trim();
+  if(!name){alert('請填寫姓名');return;}
+  if(!ig){alert('請填寫 Instagram 帳號');return;}
+  if(!email){alert('請填寫電子信箱');return;}
+  if(!selTeacher){alert('請選擇老師');return;}
+  if(selY===null||!selTime){alert('請選擇諮詢日期與時間');return;}
+  if(!selMode){alert('請選擇諮詢方式');return;}
+  const dL=`${selY} 年 ${selM+1} 月 ${selD} 日（週${DAYS_TW[wd(selY,selM,selD)]}）`;
+  const tL=selTeacher==='male'?'男老師':'女老師';
+  const mL=selMode==='online'?'線上諮詢':'當面諮詢';
+  const loc=document.getElementById('locationInput').value.trim();
+  let det=`諮詢時間：${dL} ${selTime}\n諮詢老師：${tL}\n諮詢方式：${mL}`;
+  if(selMode==='face'&&loc) det+=`\n地點偏好：${loc}`;
+  det+=`\n\n老師將透過 Instagram @${ig} 與您確認細節。`;
+  document.getElementById('mainForm').style.display='none';
+  document.getElementById('successBox').style.display='block';
+  document.getElementById('successTitle').textContent=name+' 的預約已送出';
+  document.getElementById('successDetail').textContent=det;
+}
+
+function addToCalendar(e){
+  e.preventDefault();
+  if(selY===null||!selTime) return;
+  const h=parseInt(selTime);
+  const s=new Date(selY,selM,selD,h,0), en=new Date(selY,selM,selD,h+1,0);
+  const fmt=dt=>dt.getFullYear()+String(dt.getMonth()+1).padStart(2,'0')+String(dt.getDate()).padStart(2,'0')+'T'+String(dt.getHours()).padStart(2,'0')+'0000';
+  const name=document.getElementById('name').value.trim()||'諮詢';
+  const tL=selTeacher==='male'?'男老師':'女老師';
+  const mL=selMode==='online'?'線上':'當面';
+  const loc=selMode==='face'?(document.getElementById('locationInput').value.trim()||'待確認'):'線上（連結由老師提供）';
+  window.open('https://calendar.google.com/calendar/render?action=TEMPLATE'
+    +'&text='+encodeURIComponent('紫微斗數命理諮詢－'+name)
+    +'&dates='+fmt(s)+'/'+fmt(en)
+    +'&details='+encodeURIComponent('諮詢老師：'+tL+'　方式：'+mL+'諮詢')
+    +'&location='+encodeURIComponent(loc),'_blank');
+}
+
+init();
+</script>
+</body>
+</html>
