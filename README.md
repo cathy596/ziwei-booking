@@ -1,1 +1,3 @@
-# ziwei-booking
+{
+  "version": 2
+}
