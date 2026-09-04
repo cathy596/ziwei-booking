@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="zh-Hant">
 
 <head>
-
-  <base target="_top">
 
   <meta charset="UTF-8">
 
@@ -23,30 +21,20 @@
     :root {
 
       --bg: #f8f5fb;
-
       --card: #ffffff;
-
       --text: #2d2833;
-
       --muted: #766f7e;
-
       --primary: #7d5a93;
-
       --primary-dark: #68477e;
-
       --border: #e6dfea;
-
       --danger: #b54848;
-
       --success: #467a58;
 
     }
 
 
     * {
-
       box-sizing: border-box;
-
     }
 
 
@@ -109,7 +97,7 @@
         0 0 10px;
 
       letter-spacing:
-        0.04em;
+        .04em;
 
     }
 
@@ -186,10 +174,7 @@
 
 
     .field {
-
-      margin-bottom:
-        16px;
-
+      margin-bottom: 16px;
     }
 
 
@@ -287,10 +272,7 @@
 
 
     .option {
-
-      position:
-        relative;
-
+      position: relative;
     }
 
 
@@ -431,10 +413,7 @@
 
 
     .topic input {
-
-      width:
-        auto;
-
+      width: auto;
     }
 
 
@@ -474,20 +453,14 @@
 
 
     .btn:hover {
-
-      background:
-        var(--primary-dark);
-
+      background: var(--primary-dark);
     }
 
 
     .btn:disabled {
 
-      opacity:
-        .55;
-
-      cursor:
-        not-allowed;
+      opacity: .55;
+      cursor: not-allowed;
 
     }
 
@@ -524,18 +497,12 @@
 
 
     .error {
-
-      color:
-        var(--danger);
-
+      color: var(--danger);
     }
 
 
     .success {
-
-      color:
-        var(--success);
-
+      color: var(--success);
     }
 
 
@@ -603,7 +570,7 @@
 
         width:
           min(
-            100% - 20px,
+            calc(100% - 20px),
             760px
           );
 
@@ -671,12 +638,11 @@
     </div>
 
 
+
     <form id="bookingForm">
 
 
-      <!-- =====================
-           01 基本資訊
-      ====================== -->
+      <!-- 01 基本資訊 -->
 
       <div class="card">
 
@@ -739,6 +705,7 @@
         </div>
 
 
+
         <div class="grid">
 
 
@@ -783,9 +750,7 @@
 
 
 
-      <!-- =====================
-           02 出生資訊
-      ====================== -->
+      <!-- 02 出生資訊 -->
 
       <div class="card">
 
@@ -853,9 +818,7 @@
 
 
 
-      <!-- =====================
-           03 老師
-      ====================== -->
+      <!-- 03 老師 -->
 
       <div class="card">
 
@@ -864,34 +827,22 @@
         </h2>
 
         <div
-{
-  "success": true,
-  "data": {
-    "teachers": [
-      {
-        "key": "male",
-        "label": "男老師"
-      },
-      {
-        "key": "female",
-        "label": "女老師"
-      }
-    ],
-    "bookingDaysAhead": 30,
-    "minAdvanceHours": 12,
-    "offlineLastTime": "20:00",
-    "officialLineUrl": ""
-  }
-}
+          id="teacherGrid"
+          class="option-grid"
         ></div>
+
+        <div
+          id="teacherStatus"
+          class="status"
+        >
+          正在載入老師資料…
+        </div>
 
       </div>
 
 
 
-      <!-- =====================
-           04 諮詢方式
-      ====================== -->
+      <!-- 04 諮詢方式 -->
 
       <div class="card">
 
@@ -920,8 +871,7 @@
               </div>
 
               <div class="option-desc">
-                不受地點限制，
-                可線上進行諮詢
+                不受地點限制，可線上進行諮詢
               </div>
 
             </label>
@@ -946,8 +896,7 @@
               </div>
 
               <div class="option-desc">
-                面對面諮詢，
-                更有親切感！
+                面對面諮詢，更有親切感！
               </div>
 
             </label>
@@ -961,9 +910,7 @@
 
 
 
-      <!-- =====================
-           05 日期時間
-      ====================== -->
+      <!-- 05 日期時間 -->
 
       <div class="card">
 
@@ -1027,9 +974,7 @@
 
 
 
-      <!-- =====================
-           06 主題
-      ====================== -->
+      <!-- 06 主題 -->
 
       <div class="card">
 
@@ -1125,9 +1070,7 @@
 
 
 
-      <!-- =====================
-           07 問題
-      ====================== -->
+      <!-- 07 問題 -->
 
       <div class="card">
 
@@ -1177,9 +1120,7 @@
 
 
 
-  <!-- =====================
-       預約成功
-  ====================== -->
+  <!-- 預約成功 -->
 
   <div
     id="successArea"
@@ -1217,6 +1158,17 @@
 <script>
 
 
+/*************************************************
+ * ★★★★★ 最重要 ★★★★★
+ *
+ * 把這裡換成 Apps Script 部署後的 /exec 網址
+ *************************************************/
+
+const API_URL =
+  'https://script.google.com/macros/s/AKfycbz33wCOouj9DgaW-rWD5jpH0N7kZ3bTg5O4TMa6e9G3IN8jQsKA2Sq19fviDqeHdS2tCg/exec';
+
+
+
 let publicConfig =
   null;
 
@@ -1231,66 +1183,113 @@ let selectedConsultType =
 
 
 document.addEventListener(
-
   'DOMContentLoaded',
-
   init
-
 );
 
 
 
-/* =========================
+/* =========================================
    初始化
-========================= */
+========================================= */
 
-function init() {
+async function init() {
+
+  bindEvents();
 
 
-  google.script.run
+  try {
 
-    .withSuccessHandler(
-      setupPage
-    )
+    if (
+      API_URL.includes(
+        '請貼上'
+      )
+    ) {
 
-    .withFailureHandler(
-      showFatal
-    )
+      throw new Error(
+        '尚未設定 Apps Script API_URL'
+      );
 
-    .getPublicConfig();
+    }
 
+
+    const url =
+      `${API_URL}?action=config&_=${Date.now()}`;
+
+
+    const response =
+      await fetch(
+        url,
+        {
+          method:
+            'GET',
+
+          redirect:
+            'follow'
+        }
+      );
+
+
+    const result =
+      await response.json();
+
+
+    if (
+      !result.success
+    ) {
+
+      throw new Error(
+        result.message ||
+        '讀取設定失敗'
+      );
+
+    }
+
+
+    setupPage(
+      result.data
+    );
+
+
+  } catch (error) {
+
+    showFatal(
+      error
+    );
+
+  }
+
+}
+
+
+
+/* =========================================
+   綁定事件
+========================================= */
+
+function bindEvents() {
 
 
   document
     .getElementById(
       'date'
     )
-
     .addEventListener(
-
       'change',
-
       loadSlots
-
     );
-
 
 
   document
     .querySelectorAll(
       'input[name="consultType"]'
     )
-
     .forEach(
       input => {
 
-
         input.addEventListener(
-
           'change',
-
           e => {
-
 
             selectedConsultType =
               e.target.value;
@@ -1299,22 +1298,21 @@ function init() {
             updateDateAvailability();
 
 
-            if (
+            resetTime();
 
-              selectedTeacher
 
-              &&
-
-              selectedConsultType
-
-              &&
-
+            const date =
               document
                 .getElementById(
                   'date'
                 )
-                .value
+                .value;
 
+
+            if (
+              selectedTeacher &&
+              selectedConsultType &&
+              date
             ) {
 
               loadSlots();
@@ -1322,50 +1320,48 @@ function init() {
             }
 
           }
-
         );
 
       }
-
     );
-
 
 
   document
     .getElementById(
       'bookingForm'
     )
-
     .addEventListener(
-
       'submit',
-
       submitBooking
-
     );
 
 }
 
 
 
-/* =========================
-   建立老師
-========================= */
+/* =========================================
+   建立老師選項
+========================================= */
 
 function setupPage(
   config
 ) {
-
 
   publicConfig =
     config;
 
 
   const grid =
-
     document
       .getElementById(
         'teacherGrid'
+      );
+
+
+  const teacherStatus =
+    document
+      .getElementById(
+        'teacherStatus'
       );
 
 
@@ -1379,7 +1375,6 @@ function setupPage(
 
 
         const wrap =
-
           document
             .createElement(
               'div'
@@ -1395,16 +1390,15 @@ function setupPage(
 
 
         if (
-
-          teacher.key ===
-          'male'
-
+          teacher.key === 'male'
         ) {
 
           description =
             '理性分析｜事業・健康・人生方向';
 
-        } else {
+        }
+
+        else {
 
           description =
             '關係探索｜感情・財務・自我理解';
@@ -1427,15 +1421,11 @@ function setupPage(
           >
 
             <div class="option-title">
-
               ${teacher.label}
-
             </div>
 
             <div class="option-desc">
-
               ${description}
-
             </div>
 
           </label>
@@ -1452,13 +1442,9 @@ function setupPage(
           .querySelector(
             'input'
           )
-
           .addEventListener(
-
             'change',
-
             e => {
-
 
               selectedTeacher =
                 e.target.value;
@@ -1470,18 +1456,17 @@ function setupPage(
               resetTime();
 
 
-              if (
-
-                selectedConsultType
-
-                &&
-
+              const date =
                 document
                   .getElementById(
                     'date'
                   )
-                  .value
+                  .value;
 
+
+              if (
+                selectedConsultType &&
+                date
               ) {
 
                 loadSlots();
@@ -1489,12 +1474,14 @@ function setupPage(
               }
 
             }
-
           );
 
       }
-
     );
+
+
+  teacherStatus.textContent =
+    '';
 
 
   setupDateRange();
@@ -1503,70 +1490,60 @@ function setupPage(
 
 
 
-/* =========================
+/* =========================================
    日期範圍
-========================= */
+========================================= */
 
 function setupDateRange() {
 
 
   const dateInput =
-
     document
       .getElementById(
         'date'
       );
 
 
-  const today =
+  const now =
     new Date();
 
 
   const minDate =
-
     new Date(
-
-      today.getTime()
-
+      now.getTime()
       +
-
       publicConfig
         .minAdvanceHours
-
       *
-
-      60 * 60 * 1000
-
+      60
+      *
+      60
+      *
+      1000
     );
 
 
   const maxDate =
     new Date(
-      today
+      now
     );
 
 
   maxDate.setDate(
-
     maxDate.getDate()
-
     +
-
     publicConfig
       .bookingDaysAhead
-
   );
 
 
   dateInput.min =
-
     formatDateInput(
       minDate
     );
 
 
   dateInput.max =
-
     formatDateInput(
       maxDate
     );
@@ -1575,15 +1552,14 @@ function setupDateRange() {
 
 
 
-/* =========================
-   是否可以選日期
-========================= */
+/* =========================================
+   是否開放日期
+========================================= */
 
 function updateDateAvailability() {
 
 
   const dateInput =
-
     document
       .getElementById(
         'date'
@@ -1591,15 +1567,10 @@ function updateDateAvailability() {
 
 
   dateInput.disabled =
-
     !(
-
       selectedTeacher
-
       &&
-
       selectedConsultType
-
     );
 
 
@@ -1615,9 +1586,9 @@ function updateDateAvailability() {
 
 
 
-/* =========================
+/* =========================================
    日期格式
-========================= */
+========================================= */
 
 function formatDateInput(
   date
@@ -1629,31 +1600,23 @@ function formatDateInput(
 
 
   const m =
-
     String(
-
       date.getMonth() + 1
-
     )
-
-    .padStart(
-      2,
-      '0'
-    );
+      .padStart(
+        2,
+        '0'
+      );
 
 
   const d =
-
     String(
-
       date.getDate()
-
     )
-
-    .padStart(
-      2,
-      '0'
-    );
+      .padStart(
+        2,
+        '0'
+      );
 
 
   return `${y}-${m}-${d}`;
@@ -1662,15 +1625,14 @@ function formatDateInput(
 
 
 
-/* =========================
+/* =========================================
    重設時間
-========================= */
+========================================= */
 
 function resetTime() {
 
 
   const select =
-
     document
       .getElementById(
         'time'
@@ -1684,9 +1646,7 @@ function resetTime() {
   select.innerHTML = `
 
     <option value="">
-
       請先選擇老師、諮詢方式與日期
-
     </option>
 
   `;
@@ -1703,15 +1663,14 @@ function resetTime() {
 
 
 
-/* =========================
-   讀取時段
-========================= */
+/* =========================================
+   取得可預約時段
+========================================= */
 
-function loadSlots() {
+async function loadSlots() {
 
 
   const date =
-
     document
       .getElementById(
         'date'
@@ -1720,7 +1679,6 @@ function loadSlots() {
 
 
   const select =
-
     document
       .getElementById(
         'time'
@@ -1728,7 +1686,6 @@ function loadSlots() {
 
 
   const status =
-
     document
       .getElementById(
         'slotStatus'
@@ -1736,17 +1693,9 @@ function loadSlots() {
 
 
   if (
-
-    !selectedTeacher
-
-    ||
-
-    !selectedConsultType
-
-    ||
-
+    !selectedTeacher ||
+    !selectedConsultType ||
     !date
-
   ) {
 
     resetTime();
@@ -1763,9 +1712,7 @@ function loadSlots() {
   select.innerHTML = `
 
     <option value="">
-
       讀取可預約時段中…
-
     </option>
 
   `;
@@ -1779,169 +1726,193 @@ function loadSlots() {
     '正在確認老師的行事曆…';
 
 
-  google.script.run
-
-    .withSuccessHandler(
-      slots => {
+  try {
 
 
-        select.innerHTML =
-          '';
+    const url =
+
+      `${API_URL}`
+
+      +
+
+      `?action=slots`
+
+      +
+
+      `&teacher=${encodeURIComponent(
+        selectedTeacher
+      )}`
+
+      +
+
+      `&date=${encodeURIComponent(
+        date
+      )}`
+
+      +
+
+      `&consultType=${encodeURIComponent(
+        selectedConsultType
+      )}`
+
+      +
+
+      `&_=${Date.now()}`;
 
 
-        // =========================
-        // 當天額滿
-        // =========================
+    const response =
+      await fetch(
+        url,
+        {
+          method:
+            'GET',
 
-        if (
-          !slots.length
-        ) {
-
-
-          select.disabled =
-            true;
-
-
-          select.innerHTML = `
-
-            <option value="">
-
-              當天已預約滿
-
-            </option>
-
-          `;
-
-
-          status.className =
-            'status error';
-
-
-          status.textContent =
-
-            '當天已預約滿，請選擇其他天。';
-
-
-          return;
-
+          redirect:
+            'follow'
         }
+      );
 
 
-        select.disabled =
-          false;
+    const result =
+      await response.json();
 
 
-        select.innerHTML = `
+    if (
+      !result.success
+    ) {
 
-          <option value="">
+      throw new Error(
+        result.message ||
+        '讀取時段失敗'
+      );
 
-            請選擇時段
+    }
 
+
+    const slots =
+      result.data || [];
+
+
+    if (
+      !slots.length
+    ) {
+
+
+      select.disabled =
+        true;
+
+
+      select.innerHTML = `
+
+        <option value="">
+          當天沒有可預約時段
+        </option>
+
+      `;
+
+
+      status.className =
+        'status error';
+
+
+      status.textContent =
+        '當天沒有可預約時段，請選擇其他日期。';
+
+
+      return;
+
+    }
+
+
+    select.disabled =
+      false;
+
+
+    select.innerHTML = `
+
+      <option value="">
+        請選擇時段
+      </option>
+
+    `
+
+    +
+
+    slots
+      .map(
+        time => `
+
+          <option value="${time}">
+            ${time}
           </option>
 
         `
-
-        +
-
-        slots
-          .map(
-            t => `
-
-              <option value="${t}">
-
-                ${t}
-
-              </option>
-
-            `
-          )
-
-          .join('');
+      )
+      .join('');
 
 
-        status.className =
-          'status success';
+    status.className =
+      'status success';
 
 
-        if (
+    if (
+      selectedConsultType ===
+      '現場'
+    ) {
 
-          selectedConsultType ===
-          '現場'
+      status.textContent =
+        `目前有 ${slots.length} 個可預約時段，現場最晚 20:00。`;
 
-        ) {
+    }
 
-          status.textContent =
+    else {
 
-            `目前有 ${slots.length} 個可預約時段，現場最晚 20:00。`;
+      status.textContent =
+        `目前有 ${slots.length} 個可預約時段。`;
 
-        } else {
-
-          status.textContent =
-
-            `目前有 ${slots.length} 個可預約時段。`;
-
-        }
-
-      }
-
-    )
+    }
 
 
-    .withFailureHandler(
-      err => {
+  } catch (error) {
 
 
-        select.disabled =
-          true;
-
-
-        select.innerHTML = `
-
-          <option value="">
-
-            讀取失敗
-
-          </option>
-
-        `;
-
-
-        status.className =
-          'status error';
-
-
-        status.textContent =
-
-          err.message
-
-          ||
-
-          '讀取時段失敗。';
-
-      }
-
-    )
-
-
-    .getAvailableSlots(
-
-      selectedTeacher,
-
-      date,
-
-      selectedConsultType
-
+    console.error(
+      error
     );
+
+
+    select.disabled =
+      true;
+
+
+    select.innerHTML = `
+
+      <option value="">
+        讀取失敗
+      </option>
+
+    `;
+
+
+    status.className =
+      'status error';
+
+
+    status.textContent =
+      error.message ||
+      '讀取時段失敗。';
+
+  }
 
 }
 
 
 
-/* =========================
+/* =========================================
    送出預約
-========================= */
+========================================= */
 
-function submitBooking(
+async function submitBooking(
   e
 ) {
 
@@ -1954,7 +1925,6 @@ function submitBooking(
 
 
   const submitBtn =
-
     document
       .getElementById(
         'submitBtn'
@@ -1962,7 +1932,6 @@ function submitBooking(
 
 
   const submitStatus =
-
     document
       .getElementById(
         'submitStatus'
@@ -1971,23 +1940,22 @@ function submitBooking(
 
   const topicValues = [
 
-    ...form.querySelectorAll(
-      'input[name="topics"]:checked'
-    )
+    ...form
+      .querySelectorAll(
+        'input[name="topics"]:checked'
+      )
 
   ]
-
-  .map(
-    el =>
-      el.value
-  );
+    .map(
+      el =>
+        el.value
+    );
 
 
   const payload = {
 
 
     name:
-
       form
         .name
         .value
@@ -1995,14 +1963,12 @@ function submitBooking(
 
 
     gender:
-
       form
         .gender
         .value,
 
 
     lineId:
-
       form
         .lineId
         .value
@@ -2010,7 +1976,6 @@ function submitBooking(
 
 
     igAccount:
-
       form
         .igAccount
         .value
@@ -2018,21 +1983,18 @@ function submitBooking(
 
 
     birthDate:
-
       form
         .birthDate
         .value,
 
 
     birthTime:
-
       form
         .birthTime
         .value,
 
 
     birthPlace:
-
       form
         .birthPlace
         .value
@@ -2040,36 +2002,30 @@ function submitBooking(
 
 
     teacherKey:
-
       selectedTeacher,
 
 
     consultType:
-
       selectedConsultType,
 
 
     date:
-
       form
         .date
         .value,
 
 
     time:
-
       form
         .time
         .value,
 
 
     topics:
-
       topicValues,
 
 
     question:
-
       form
         .question
         .value
@@ -2091,154 +2047,200 @@ function submitBooking(
 
 
   submitStatus.textContent =
-
     '系統正在再次確認時段，避免撞期。';
 
 
-  google.script.run
-
-    .withSuccessHandler(
-      result => {
+  try {
 
 
-        document
-          .getElementById(
-            'formArea'
-          )
-          .style.display =
-            'none';
+    const body =
+      new URLSearchParams();
 
 
-        document
-          .getElementById(
-            'successArea'
-          )
-          .style.display =
-            'block';
+    body.append(
+      'action',
+      'booking'
+    );
 
 
-        document
-          .getElementById(
-            'successText'
-          )
-          .innerHTML =
-
-            `你已成功預約 <strong>${result.teacher}</strong><br>`
-
-            +
-
-            `諮詢方式：${result.consultType}<br>`
-
-            +
-
-            `${result.date}　${result.time}<br><br>`
-
-            +
-
-            `系統已同步建立到老師的 Google Calendar。`;
+    body.append(
+      'payload',
+      JSON.stringify(
+        payload
+      )
+    );
 
 
-        if (
-          result.officialLineUrl
-        ) {
+    const response =
+      await fetch(
+        API_URL,
+        {
 
+          method:
+            'POST',
 
-          const link =
+          body:
+            body,
 
-            document
-              .getElementById(
-                'lineLink'
-              );
-
-
-          link.href =
-            result.officialLineUrl;
-
-
-          link.style.display =
-            'inline-block';
+          redirect:
+            'follow'
 
         }
-
-      }
-
-    )
+      );
 
 
-    .withFailureHandler(
-      err => {
+    const result =
+      await response.json();
 
 
-        submitBtn.disabled =
-          false;
+    if (
+      !result.success
+    ) {
+
+      throw new Error(
+        result.message ||
+        '預約失敗'
+      );
+
+    }
 
 
-        submitBtn.textContent =
-          '確認送出預約';
+    const data =
+      result.data;
 
 
-        submitStatus.className =
-          'status error';
+    document
+      .getElementById(
+        'formArea'
+      )
+      .style.display =
+        'none';
 
 
-        submitStatus.textContent =
-
-          err.message
-
-          ||
-
-          '預約失敗，請重新確認資料。';
-
-
-        loadSlots();
-
-      }
-
-    )
+    document
+      .getElementById(
+        'successArea'
+      )
+      .style.display =
+        'block';
 
 
-    .createBooking(
-      payload
+    document
+      .getElementById(
+        'successText'
+      )
+      .innerHTML =
+
+        `你已成功預約 <strong>${data.teacher}</strong><br>`
+
+        +
+
+        `諮詢方式：${data.consultType}<br>`
+
+        +
+
+        `${data.date}　${data.time}<br><br>`
+
+        +
+
+        `系統已同步建立到老師的 Google Calendar。`;
+
+
+    if (
+      data.officialLineUrl
+    ) {
+
+
+      const link =
+        document
+          .getElementById(
+            'lineLink'
+          );
+
+
+      link.href =
+        data.officialLineUrl;
+
+
+      link.style.display =
+        'inline-block';
+
+    }
+
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+
+
+  } catch (error) {
+
+
+    console.error(
+      error
     );
+
+
+    submitBtn.disabled =
+      false;
+
+
+    submitBtn.textContent =
+      '確認送出預約';
+
+
+    submitStatus.className =
+      'status error';
+
+
+    submitStatus.textContent =
+      error.message ||
+      '預約失敗，請重新確認資料。';
+
+
+    loadSlots();
+
+  }
 
 }
 
 
 
-/* =========================
+/* =========================================
    系統錯誤
-========================= */
+========================================= */
 
 function showFatal(
-  err
+  error
 ) {
 
 
-  document.body.innerHTML = `
+  console.error(
+    error
+  );
 
-    <div class="wrap">
 
-      <div class="card">
+  const teacherStatus =
+    document
+      .getElementById(
+        'teacherStatus'
+      );
 
-        <h2>
-          系統設定尚未完成
-        </h2>
 
-        <p class="error">
+  if (
+    teacherStatus
+  ) {
 
-          ${
-            err.message
-            ||
-            '讀取設定失敗。'
-          }
+    teacherStatus.className =
+      'status error';
 
-        </p>
 
-      </div>
+    teacherStatus.textContent =
+      error.message ||
+      '無法讀取老師資料。';
 
-    </div>
-
-  `;
+  }
 
 }
 
